@@ -21,5 +21,10 @@ jobs:
         echo "Downloading file from URL: ${{ github.event.inputs.download_url }}"
         curl -L -o downloaded_file ${{ github.event.inputs.download_url }}
 
-    - name: List downloaded file
-      run: ls -l downloaded_file
+    - name: Commit file to repository
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add downloaded_file
+        git commit -m "Add downloaded file"
+        git push
