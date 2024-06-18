@@ -1,10 +1,10 @@
-name: Download YouTube Video Workflow
+name: 下载 YouTube 视频工作流程
 
 on:
   workflow_dispatch:
     inputs:
       video_url:
-        description: 'URL of the YouTube video to download'
+        description: '要下载的 YouTube 视频的 URL'
         required: true
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
@@ -14,10 +14,11 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # 使用支持 Node.js 20 的版本
+      uses: actions/checkout@v3
+
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # 使用支持 Node.js 20 的版本
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
@@ -30,16 +31,5 @@ jobs:
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
-
-    - name: Configure Git
-      run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
-
-    - name: Add and commit video to repository
-      run: |
-        git add .
-        git commit -m "Add downloaded video"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        mz=$(ls -t | head -n 1)
+        curl -u lele1894:yD9R7YJdXNMHZ5fm -T ./$mz https://higa.teracloud.jp/dav/
