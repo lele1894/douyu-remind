@@ -29,5 +29,6 @@ jobs:
     - name: Download video
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
-        yt-dlp -o "1.mp4" "${{ github.event.inputs.video_url }}"
-        curl -u lele1894:yD9R7YJdXNMHZ5fm -T ./1.mp4 https://higa.teracloud.jp/dav/
+        yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+        mz=$(ls -t | head -n 1)
+        curl -u lele1894:yD9R7YJdXNMHZ5fm -T ./$mz https://higa.teracloud.jp/dav/
