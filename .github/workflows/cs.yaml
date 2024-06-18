@@ -1,4 +1,4 @@
-name: Download and Upload Video to WebDAV
+name: Download Video to WebDAV
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 jobs:
-  download_upload_video:
+  download_video:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,17 +31,9 @@ jobs:
         timestamp=$(date +'%Y%m%d%H%M%S')
         filename="${timestamp}.mp4"
         yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
+        echo "::set-output name=downloaded_file::${filename}"  # Set output for later use
 
     - name: Print downloaded file path
       run: |
-        ls -l
-
-    - name: Upload to WebDAV
-      run: |
-        rclone copy "${timestamp}.mp4" webdav:https://higa.teracloud.jp/dav/ \
-          --webdav-user='lele1894' \
-          --webdav-pass='yD9R7YJdXNMHZ5fm'
-
-    - name: Display WebDAV upload status
-      run: |
-        echo "File uploaded to WebDAV: https://higa.teracloud.jp/dav/${timestamp}.mp4"
+        downloaded_file_path=$(ls -d ${timestamp}.mp4)
+        echo "Downloaded file path: ${downloaded_file_path}"
