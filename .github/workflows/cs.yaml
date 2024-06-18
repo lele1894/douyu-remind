@@ -1,4 +1,4 @@
-name: Download Video to WebDAV
+name: Upload Video to WebDAV
 
 on:
   workflow_dispatch:
@@ -9,20 +9,15 @@ on:
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 jobs:
-  download_video:
+  upload_to_webdav:
     runs-on: ubuntu-latest
-
-    outputs:
-      downloaded_file_path: ${{ steps.download.outputs.downloaded_file_path }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4  # Update to v4 of actions/checkout
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v5  # Update to v5 of actions/setup-python
-      with:
-        python-version: '3.x'
+      uses: actions/setup-python@v3  # Adjust version if needed
 
     - name: Install yt-dlp
       run: |
@@ -30,21 +25,14 @@ jobs:
         pip install yt-dlp
 
     - name: Download video
-      id: download
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         filename="${timestamp}.mp4"
-        tmp_dir=$(mktemp -d)
-        yt-dlp -o "${tmp_dir}/${filename}" "${{ github.event.inputs.video_url }}"
-        echo "downloaded_file_path=${tmp_dir}/${filename}" >> $GITHUB_ENV  # Store output using environment file
+        yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
+        echo "Downloaded video: ${filename}"
 
-    - name: Print downloaded file path
+    - name: Upload to WebDAV
       run: |
-        downloaded_file_path=$(cat "${{ github.workspace }}/${{ steps.download.outputs.downloaded_file_path }}")
-        echo "Downloaded file path: ${downloaded_file_path}"
-
-    - name: Set output
-      id: set-output
-      run: echo "::set-output name=downloaded_file_path::${downloaded_file_path}"
-      env:
-        downloaded_file_path: ${{ steps.download.outputs.downloaded_file_path }}
+        timestamp=$(date +'%Y%m%d%H%M%S')
+        filename="${timestamp}.mp4"
+        curl -u 'lele1894:yD9R7YJdXNMHZ5fm' -T "${filename}" https://higa.teracloud.jp/dav/
