@@ -30,10 +30,11 @@ jobs:
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         filename="${timestamp}.mp4"
-        yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
-        echo "::set-output name=downloaded_file::${filename}"  # Set output for later use
+        tmp_dir=$(mktemp -d)
+        yt-dlp -o "${tmp_dir}/${filename}" "${{ github.event.inputs.video_url }}"
+        echo "::set-output name=downloaded_file::${tmp_dir}/${filename}"  # Set output for later use
 
     - name: Print downloaded file path
       run: |
-        downloaded_file_path=$(ls -d ${timestamp}.mp4)
+        downloaded_file_path=$(cat "${{ steps.download_video.outputs.downloaded_file }}")
         echo "Downloaded file path: ${downloaded_file_path}"
