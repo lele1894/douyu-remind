@@ -29,26 +29,19 @@ jobs:
     - name: Download video
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
-        yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
-
-    - name: Get downloaded file name
-      id: get_filename
-      run: |
-        FILE=$(ls | grep -E '[0-9]{14}\.[a-z0-9]+')
-        echo "filename=$FILE" >> $GITHUB_ENV
+        filename="${timestamp}.mp4"
+        yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
 
     - name: Print downloaded file path
       run: |
-        echo "Downloaded file: ${{ env.filename }}"
+        ls -l
 
     - name: Upload to WebDAV
       run: |
-        rclone copy ${{ env.filename }} webdav:https://higa.teracloud.jp/dav/ \
+        rclone copy "${timestamp}.mp4" webdav:https://higa.teracloud.jp/dav/ \
           --webdav-user='lele1894' \
           --webdav-pass='yD9R7YJdXNMHZ5fm'
-      env:
-        RCLONE_CONFIG_PASS: ${{ secrets.RCLONE_CONFIG_PASS }}
 
     - name: Display WebDAV upload status
       run: |
-        echo "File uploaded to WebDAV: https://higa.teracloud.jp/dav/${{ env.filename }}"
+        echo "File uploaded to WebDAV: https://higa.teracloud.jp/dav/${timestamp}.mp4"
