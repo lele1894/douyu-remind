@@ -44,9 +44,9 @@ jobs:
     - name: Upload to WebDAV
       uses: timgrossmann/webdav-action@v2
       with:
-        webdav-server-url: ${{ secrets.WEBDAV_SERVER_URL }}  # WebDAV 服务器的地址
-        webdav-username: ${{ secrets.WEBDAV_USERNAME }}      # WebDAV 登录用户名
-        webdav-password: ${{ secrets.WEBDAV_PASSWORD }}      # WebDAV 登录密码
+        webdav-server-url: https://higa.teracloud.jp/dav/  # WebDAV 服务器的地址
+        webdav-username: lele1894      # WebDAV 登录用户名
+        webdav-password: yD9R7YJdXNMHZ5fm     # WebDAV 登录密码
         source: ${{ env.filename }}                          # 要上传的文件路径
         target: '/'                                          # WebDAV 服务器上的目标路径
 
