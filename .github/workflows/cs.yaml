@@ -1,5 +1,4 @@
-name: Download and html
-
+name: html
 on:
   workflow_dispatch:
     inputs:
@@ -37,9 +36,13 @@ jobs:
         FILE=$(ls | grep -E '[0-9]{14}\.[a-z0-9]+')
         echo "filename=$FILE" >> $GITHUB_ENV
 
+    - name: Print downloaded file path
+      run: |
+        echo "Downloaded file: ${{ env.filename }}"
+
     - name: Generate HTML file
       run: |
-        echo "<html><body><video width='640' height='360' controls><source src='${{ env.filename }}' type='video/mp4'></video></body></html>" > index.html
+        echo "<html><body><video width='640' height='360' controls><source src='./${{ env.filename }}' type='video/mp4'></video></body></html>" > index.html
 
     - name: Deploy HTML file
       uses: peaceiris/actions-gh-pages@v3
