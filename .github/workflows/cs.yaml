@@ -42,12 +42,12 @@ jobs:
         echo "Downloaded file: ${{ env.filename }}"
 
     - name: Upload to WebDAV
-      uses: JesseTG/rclone-action@v1
-      with:
-        rclone_config: ${{ secrets.RCLONE_CONFIG }}
-        source: ${{ env.filename }}
-        destination: 'webdav:/path/to/remote/directory'
-        flags: '--webdav-url=https://higa.teracloud.jp/dav/ --webdav-user=lele1894 --webdav-pass=yD9R7YJdXNMHZ5fm'
+      run: |
+        rclone copy ${{ env.filename }} webdav:https://higa.teracloud.jp/dav/ \
+          --webdav-user='lele1894' \
+          --webdav-pass='yD9R7YJdXNMHZ5fm'
+      env:
+        RCLONE_CONFIG_PASS: ${{ secrets.RCLONE_CONFIG_PASS }}
 
     - name: Display WebDAV upload status
       run: |
