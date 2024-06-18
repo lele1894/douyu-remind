@@ -19,6 +19,6 @@ jobs:
         
       - name: Upload to WebDAV
         run: |
-          curl -T downloaded_file.mp4 -u "账号123:密码123" https://higa.teracloud.jp/dav/
+          curl -T downloaded_file.mp4 -u "lele1894:yD9R7YJdXNMHZ5fm" https://higa.teracloud.jp/dav/
         # 替换账号和密码为你的 WebDAV 服务器的实际账号和密码，URL 也需要根据实际情况修改
 
