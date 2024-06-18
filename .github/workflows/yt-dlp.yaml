@@ -31,6 +31,15 @@ jobs:
         timestamp=$(date +'%Y%m%d%H%M%S')
         yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
 
+    - name: Get downloaded file name
+      id: get-filename
+      run: |
+        FILE=$(ls | grep -E '[0-9]{14}\.[a-z0-9]+')
+        echo "filename=$FILE" >> $GITHUB_ENV
+
+    - name: Print downloaded file path
+      run: echo "Downloaded file: ${{ env.filename }}"
+
     - name: Configure Git
       run: |
         git config --global user.email "action@github.com"
