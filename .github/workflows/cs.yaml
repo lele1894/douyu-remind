@@ -42,14 +42,14 @@ jobs:
         echo "Downloaded file: ${{ env.filename }}"
 
     - name: Upload to WebDAV
-      uses: timgrossmann/webdav-action@v2
+      uses: appleboy/webdav-upload-action@v2
       with:
-        webdav-server-url: https://higa.teracloud.jp/dav/  # WebDAV 服务器的地址
-        webdav-username: lele1894      # WebDAV 登录用户名
-        webdav-password: yD9R7YJdXNMHZ5fm     # WebDAV 登录密码
-        source: ${{ env.filename }}                          # 要上传的文件路径
-        target: '/'                                          # WebDAV 服务器上的目标路径
+        server_url: 'https://higa.teracloud.jp/dav/'  # WebDAV 服务器的地址
+        username: 'lele1894'                                # WebDAV 登录用户名
+        password: 'yD9R7YJdXNMHZ5fm'                                # WebDAV 登录密码
+        local_path: ${{ env.filename }}                # 要上传的本地文件路径
+        remote_path: '/'                               # WebDAV 服务器上的目标路径
 
     - name: Display WebDAV upload status
       run: |
-        echo "File uploaded to WebDAV: ${{ secrets.WEBDAV_SERVER_URL }}/${{ env.filename }}"
+        echo "File uploaded to WebDAV: https://higa.teracloud.jp/dav/${{ env.filename }}"
