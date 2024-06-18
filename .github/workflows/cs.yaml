@@ -1,4 +1,5 @@
-name: html
+name: Download and Upload Video to WebDAV
+
 on:
   workflow_dispatch:
     inputs:
@@ -8,7 +9,7 @@ on:
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 jobs:
-  download_video:
+  download_upload_video:
     runs-on: ubuntu-latest
 
     steps:
@@ -40,17 +41,15 @@ jobs:
       run: |
         echo "Downloaded file: ${{ env.filename }}"
 
-    - name: Generate HTML file
-      run: |
-        echo "<html><body><video width='640' height='360' controls><source src='./${{ env.filename }}' type='video/mp4'></video></body></html>" > index.html
-
-    - name: Deploy HTML file
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Upload to WebDAV
+      uses: timgrossmann/webdav-action@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: .
-        commit_message: "Publish video playback page"
+        webdav-server-url: ${{ secrets.WEBDAV_SERVER_URL }}  # WebDAV 服务器的地址
+        webdav-username: ${{ secrets.WEBDAV_USERNAME }}      # WebDAV 登录用户名
+        webdav-password: ${{ secrets.WEBDAV_PASSWORD }}      # WebDAV 登录密码
+        source: ${{ env.filename }}                          # 要上传的文件路径
+        target: '/'                                          # WebDAV 服务器上的目标路径
 
-    - name: Display video playback URL
+    - name: Display WebDAV upload status
       run: |
-        echo "Video playback URL: https://${{ github.repository_owner }}.github.io/${{ github.repository_name }}/index.html"
+        echo "File uploaded to WebDAV: ${{ secrets.WEBDAV_SERVER_URL }}/${{ env.filename }}"
