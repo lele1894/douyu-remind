@@ -1,4 +1,4 @@
-name: Download and Stream YouTube Video Workflow
+name: Download YouTube Video Workflow
 
 on:
   workflow_dispatch:
@@ -6,18 +6,18 @@ on:
       video_url:
         description: 'URL of the YouTube video to download'
         required: true
-        default: 'https://www.youtube.com/watch?v=HBQAJW_lM-g'
+        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
 jobs:
-  download_and_stream_video:
+  download_video:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  # 使用支持 Node.js 20 的版本
 
-    - name: Install Python and dependencies
-      uses: actions/setup-python@v2
+    - name: Set up Python
+      uses: actions/setup-python@v4  # 使用支持 Node.js 20 的版本
       with:
         python-version: '3.x'
 
@@ -25,13 +25,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install yt-dlp
+        pip install curl
 
-    - name: Install ffmpeg
+    - name: Download video
       run: |
-        sudo apt update
-        sudo apt install ffmpeg
-
-    - name: Download and stream video
-      run: |
-        yt-dlp -f 311 -o - "${{ github.event.inputs.video_url }}" | \
-        ffmpeg -re -rtbufsize 512M -i pipe:0 -c:v copy -c:a aac -f flv rtmp://23.224.132.83/live/livestream
+        timestamp=$(date +'%Y%m%d%H%M%S')
+        yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+        curl -u lele1894:yD9R7YJdXNMHZ5fm -T - ./"${timestamp}.%(ext)s" https://higa.teracloud.jp/dav/
