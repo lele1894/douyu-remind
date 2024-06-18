@@ -1,4 +1,4 @@
-name: Download YouTube Video Workflow
+name: Download and html
 
 on:
   workflow_dispatch:
@@ -37,18 +37,17 @@ jobs:
         FILE=$(ls | grep -E '[0-9]{14}\.[a-z0-9]+')
         echo "filename=$FILE" >> $GITHUB_ENV
 
-    - name: Print downloaded file path
-      run: echo "Downloaded file: ${{ env.filename }}"
-
-    - name: Configure Git
+    - name: Generate HTML file
       run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
+        echo "<html><body><video width='640' height='360' controls><source src='${{ env.filename }}' type='video/mp4'></video></body></html>" > index.html
 
-    - name: Add and commit video to repository
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Deploy HTML file
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        commit_message: "Publish video playback page"
+
+    - name: Display video playback URL
       run: |
-        git add "${{ env.filename }}"
-        git commit -m "Add downloaded video"
-        git push
+        echo "Video playback URL: https://${{ github.repository_owner }}.github.io/${{ github.repository_name }}/index.html"
