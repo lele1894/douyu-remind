@@ -1,10 +1,10 @@
-name: 下载 YouTube 视频工作流程
+name: Download YouTube Video Workflow
 
 on:
   workflow_dispatch:
     inputs:
       video_url:
-        description: '要下载的 YouTube 视频的 URL'
+        description: 'URL of the YouTube video to download'
         required: true
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
