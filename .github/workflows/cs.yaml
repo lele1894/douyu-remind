@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      downloaded_file_path: ${{ steps.download_video.outputs.downloaded_file }}
+      downloaded_file_path: ${{ steps.download.outputs.downloaded_file_path }}
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # Update to v4 of actions/checkout
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5  # Update to v5 of actions/setup-python
       with:
         python-version: '3.x'
 
@@ -36,13 +36,15 @@ jobs:
         filename="${timestamp}.mp4"
         tmp_dir=$(mktemp -d)
         yt-dlp -o "${tmp_dir}/${filename}" "${{ github.event.inputs.video_url }}"
-        echo "::set-output name=downloaded_file::${tmp_dir}/${filename}"  # Store output using set-output
+        echo "downloaded_file_path=${tmp_dir}/${filename}" >> $GITHUB_ENV  # Store output using environment file
 
     - name: Print downloaded file path
       run: |
-        downloaded_file_path=$(cat "${{ steps.download.outputs.downloaded_file }}")
+        downloaded_file_path=$(cat "${{ github.workspace }}/${{ steps.download.outputs.downloaded_file_path }}")
         echo "Downloaded file path: ${downloaded_file_path}"
 
-    - name: Set environment file
-      run: |
-        echo "DOWNLOADED_FILE_PATH=${downloaded_file_path}" >> $GITHUB_ENV
+    - name: Set output
+      id: set-output
+      run: echo "::set-output name=downloaded_file_path::${downloaded_file_path}"
+      env:
+        downloaded_file_path: ${{ steps.download.outputs.downloaded_file_path }}
