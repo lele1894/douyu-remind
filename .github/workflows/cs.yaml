@@ -1,10 +1,10 @@
-name: 下载 YouTube 视频工作流程
+name: Download YouTube Video Workflow
 
 on:
   workflow_dispatch:
     inputs:
       video_url:
-        description: '要下载的 YouTube 视频的 URL'
+        description: 'URL of the YouTube video to download'
         required: true
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
@@ -14,22 +14,21 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
-    
+      uses: actions/checkout@v3  # 使用支持 Node.js 20 的版本
+
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v4  # 使用支持 Node.js 20 的版本
       with:
         python-version: '3.x'
-    
+
     - name: Install yt-dlp
       run: |
         python -m pip install --upgrade pip
         pip install yt-dlp
-    
+
     - name: Download video
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
         mz=$(ls -t | head -n 1)
         curl -u lele1894:yD9R7YJdXNMHZ5fm -T ./$mz https://higa.teracloud.jp/dav/
-
