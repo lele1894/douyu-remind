@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
@@ -28,10 +28,8 @@ jobs:
 
     - name: Download video
       run: |
-        echo "Downloading video from URL: ${{ github.event.inputs.video_url }}"
-        yt-dlp -o "%(title)s.%(ext)s" "${{ github.event.inputs.video_url }}"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        timestamp=$(date +'%Y%m%d%H%M%S')
+        yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
 
     - name: Configure Git
       run: |
