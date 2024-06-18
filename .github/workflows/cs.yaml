@@ -42,13 +42,12 @@ jobs:
         echo "Downloaded file: ${{ env.filename }}"
 
     - name: Upload to WebDAV
-      uses: appleboy/webdav-upload-action@v2
+      uses: JesseTG/rclone-action@v1
       with:
-        server_url: 'https://higa.teracloud.jp/dav/'  # WebDAV 服务器的地址
-        username: 'lele1894'                                # WebDAV 登录用户名
-        password: 'yD9R7YJdXNMHZ5fm'                                # WebDAV 登录密码
-        local_path: ${{ env.filename }}                # 要上传的本地文件路径
-        remote_path: '/'                               # WebDAV 服务器上的目标路径
+        rclone_config: ${{ secrets.RCLONE_CONFIG }}
+        source: ${{ env.filename }}
+        destination: 'webdav:/path/to/remote/directory'
+        flags: '--webdav-url=https://higa.teracloud.jp/dav/ --webdav-user=lele1894 --webdav-pass=yD9R7YJdXNMHZ5fm'
 
     - name: Display WebDAV upload status
       run: |
