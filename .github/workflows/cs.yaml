@@ -34,4 +34,4 @@ jobs:
     - name: Download and stream video
       run: |
         yt-dlp -f 311 -o - "${{ github.event.inputs.video_url }}" | \
-        ffmpeg -re -rtbufsize 512M -i pipe:0 -c:v copy -c:a aac -f flv rtmp://74.48.213.250/live/livestream
+        ffmpeg -re -rtbufsize 512M -i pipe:0 -c:v copy -c:a aac -f flv rtmp://23.224.132.83/live/livestream
