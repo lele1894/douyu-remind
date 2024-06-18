@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # 使用支持 Node.js 20 的版本
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v4  # 使用支持 Node.js 20 的版本
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
@@ -32,7 +32,7 @@ jobs:
         yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
 
     - name: Get downloaded file name
-      id: get-filename
+      id: get_filename
       run: |
         FILE=$(ls | grep -E '[0-9]{14}\.[a-z0-9]+')
         echo "filename=$FILE" >> $GITHUB_ENV
@@ -46,9 +46,9 @@ jobs:
         git config --global user.name "GitHub Action"
 
     - name: Add and commit video to repository
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git add .
         git commit -m "Add downloaded video"
         git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
