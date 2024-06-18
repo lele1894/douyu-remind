@@ -12,6 +12,9 @@ jobs:
   download_video:
     runs-on: ubuntu-latest
 
+    outputs:
+      downloaded_file_path: ${{ steps.download_video.outputs.downloaded_file }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -27,14 +30,19 @@ jobs:
         pip install yt-dlp
 
     - name: Download video
+      id: download
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         filename="${timestamp}.mp4"
         tmp_dir=$(mktemp -d)
         yt-dlp -o "${tmp_dir}/${filename}" "${{ github.event.inputs.video_url }}"
-        echo "::set-output name=downloaded_file::${tmp_dir}/${filename}"  # Set output for later use
+        echo "::set-output name=downloaded_file::${tmp_dir}/${filename}"  # Store output using set-output
 
     - name: Print downloaded file path
       run: |
-        downloaded_file_path=$(cat "${{ steps.download_video.outputs.downloaded_file }}")
+        downloaded_file_path=$(cat "${{ steps.download.outputs.downloaded_file }}")
         echo "Downloaded file path: ${downloaded_file_path}"
+
+    - name: Set environment file
+      run: |
+        echo "DOWNLOADED_FILE_PATH=${downloaded_file_path}" >> $GITHUB_ENV
