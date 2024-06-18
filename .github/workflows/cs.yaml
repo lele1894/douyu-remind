@@ -30,9 +30,10 @@ jobs:
       run: |
         timestamp=$(date +'%Y%m%d%H%M%S')
         yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
-        mz=$(ls -t | head -n 1)
-        echo "$mz"
+
 
     - name: Upload video to WebDAV
       run: |
+        mz=$(ls -t | head -n 1)
+        echo "$mz"
         curl -u lele1894:yD9R7YJdXNMHZ5fm -T ./$mz https://higa.teracloud.jp/dav/
