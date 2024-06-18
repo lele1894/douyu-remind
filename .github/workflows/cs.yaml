@@ -15,7 +15,7 @@ jobs:
       
       - name: Download file with yt-dlp
         run: |
-          yt-dlp https://www.youtube.com/watch?v=dQw4w9WgXcQ -o "downloaded_file.mp4"  # 替换为你要下载的文件的 URL 和文件名
+          yt-dlp "https://www.youtube.com/watch?v=dQw4w9WgXcQ" -o "downloaded_file.mp4"  # 替换为你要下载的文件的 URL 和文件名
         
       - name: Upload to WebDAV
         run: |
