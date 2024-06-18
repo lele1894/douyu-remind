@@ -1,0 +1,47 @@
+name: 下载 YouTube 视频工作流程
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: '要下载的 YouTube 视频的 URL'
+        required: true
+        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+
+jobs:
+  download_video:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install yt-dlp
+      run: |
+        python -m pip install --upgrade pip
+        pip install yt-dlp
+
+    - name: Download video
+      run: |
+        echo "Downloading video from URL: ${{ github.event.inputs.video_url }}"
+        yt-dlp -o "%(title)s.%(ext)s" "${{ github.event.inputs.video_url }}"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+
+    - name: Add and commit video to repository
+      run: |
+        git add .
+        git commit -m "Add downloaded video"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
