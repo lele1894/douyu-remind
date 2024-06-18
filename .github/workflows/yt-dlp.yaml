@@ -49,6 +49,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git add .
+        git add "${{ env.filename }}"
         git commit -m "Add downloaded video"
         git push
