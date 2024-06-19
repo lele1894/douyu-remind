@@ -1,9 +1,6 @@
 name: 持续推送至 RTMP
 
 on:
-  push:
-    branches:
-      - main  # 触发主分支的推送事件
   workflow_dispatch:
     inputs:
       stop:
