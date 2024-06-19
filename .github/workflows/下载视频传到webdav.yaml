@@ -36,11 +36,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install yt-dlp
 
-      - name: 下载视频
+      - name: 下载视频并获取文件名
+        id: download
         run: |
           timestamp=$(date +'%Y%m%d%H%M%S')
-          yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+          downloaded_file="${timestamp}.%(ext)s"
+          yt-dlp -o "${downloaded_file}" "${{ github.event.inputs.video_url }}"
+          echo "::set-output name=downloaded_file::${downloaded_file}"
+
+      - name: 输出下载的文件名
+        run: |
+          echo "下载的文件名是: ${{ steps.download.outputs.downloaded_file }}"
 
       - name: 将文件上传到 WebDAV
         run: |
-          curl -T "${timestamp}.%(ext)s" -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename downloaded_file)"
+          curl -T "${{ steps.download.outputs.downloaded_file }}" -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename downloaded_file)"
