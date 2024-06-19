@@ -4,33 +4,33 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: '要下载的文件的 URL'
+        description: 'URL of the file to download'
         required: true
       webdav_endpoint:
-        description: 'WebDAV 服务器端点'
+        description: 'WebDAV server endpoint'
         required: true
       webdav_username:
-        description: 'WebDAV 用户名'
+        description: 'WebDAV username'
         required: true
       webdav_password:
-        description: 'WebDAV 密码'
+        description: 'WebDAV password'
         required: true
 
 jobs:
   upload:
     runs-on: ubuntu-latest
 
+    env:
+      DOWNLOAD_URL: ${{ github.event.inputs.download_url }}
+
     steps:
-      - name: 拉取最新的代码
-        uses: actions/checkout@v2  # 拉取最新的代码
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: 设置下载地址
-        run: echo "::set-env name=DOWNLOAD_URL::${{ github.event.inputs.download_url }}"
-
-      - name: 使用curl下载文件
+      - name: Download file with curl
         run: |
-          curl -L -o downloaded_file $(echo $DOWNLOAD_URL)
+          curl -L -o downloaded_file "${DOWNLOAD_URL}"
 
-      - name: 文件上传到WebDAV
+      - name: Upload file to WebDAV
         run: |
           curl -T downloaded_file -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename $DOWNLOAD_URL)"
