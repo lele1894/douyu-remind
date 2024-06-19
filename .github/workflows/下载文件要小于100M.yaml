@@ -1,1 +1,22 @@
+name: 下载YouTube视频到WEBDAV
 
+on:
+  workflow_dispatch:
+    inputs:
+      video_url:
+        description: '要下载的 YouTube 视频的 URL'
+        required: true
+        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      webdav_endpoint:
+        description: 'WebDAV 服务器端点'
+        required: true
+      webdav_username:
+        description: 'WebDAV 用户名'
+        required: true
+      webdav_password:
+        description: 'WebDAV 密码'
+        required: true
+
+jobs:
+  download_video:
+    runs-on: ubuntu-latest
