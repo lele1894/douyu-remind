@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          node-version: '20'  # or a higher supported version
 
       - name: 设置 Python
         uses: actions/setup-python@v2
