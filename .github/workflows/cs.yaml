@@ -3,7 +3,7 @@ name: Ngrok Expose
 on:
   push:
     branches:
-      - main  # 触发主分支的推送事件，可以根据需要调整
+      - main  # 根据需要调整分支名
 
 jobs:
   expose:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'  # 替换为你的 Python 版本，如果需要的话
+        python-version: '3.10'  # 如果需要，替换为你的 Python 版本
 
     - name: Install Ngrok
       run: |
@@ -27,9 +27,10 @@ jobs:
 
     - name: Start HTTP server
       run: |
-        python -m http.server 8000 &  # 在后台启动简单的 HTTP 服务器，监听端口 8000
+        python -m http.server 8000 &
 
     - name: Expose server with Ngrok
       run: |
-        ngrok http 8000  # 使用 Ngrok 将本地服务器的端口 8000 映射到公共网络
-
+        # Replace 'your_ngrok_authtoken' with your actual Ngrok authtoken
+        ngrok authtoken 2ZLypF1D5iqnUUlMoKpuvAcK1aS_YvSw8QEw5A2QzpjHNPN6
+        ngrok http 8000
