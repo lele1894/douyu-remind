@@ -1,22 +1,25 @@
 name: 持续推送至 RTMP
 
 on:
+  push:
+    branches:
+      - main  # 触发主分支的推送事件
   workflow_dispatch:
     inputs:
+      stop:
+        description: 'Stop the continuous RTMP push'
+        required: false
+        default: 'false'
+        type: boolean
       video_url:
         description: 'rtmp'
         required: true
         default: 'rtmp://'
-      webdav_endpoint:
-        description: 'WebDAV 服务器端点'
+      yt_url:
+        description: 'youtube地址'
         required: true
-        default: 'https://higa.teracloud.jp/dav/'
-      webdav_username:
-        description: 'WebDAV 用户名'
-        required: true
-      webdav_password:
-        description: 'WebDAV 密码'
-        required: true
+        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+
 
 jobs:
   push-to-rtmp:
@@ -27,8 +30,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install ffmpeg
-        run: sudo apt-get install ffmpeg -y
+        run: |
+          sudo apt-get install ffmpeg -y
+          pip install yt-dlp
 
       - name: Push video to RTMP
         run: |
-            ffmpeg -re -stream_loop -1 -i 20240619150133.mp4 -c copy -f flv "${{ github.event.inputs.video_url }}"
+          while true; do
+            yt-dlp -f "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
+              if [ ${{ github.event.inputs.stop }} == 'true' ]; then
+              echo "Stopping continuous push as requested."
+              exit 0
+            fi
+          done
