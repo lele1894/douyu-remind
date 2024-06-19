@@ -8,13 +8,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Download a file using wget
       run: wget -O downloaded_file https://lf3-package.vlabstatic.com/obj/faceu-packages/installer/jianying_jianyingpro_0_1.2.7_installer.exe
 
     - name: Print the full path of the downloaded file
-      run: echo "Downloaded file path: $(pwd)/downloaded_file"
+      run: echo "$(pwd)"
 
     - name: List files in current directory
       run: ls -al
