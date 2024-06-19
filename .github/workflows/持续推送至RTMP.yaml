@@ -1,4 +1,4 @@
-name: 持续推送至 RTMP
+name: 持续推送至RTMP
 
 on:
   workflow_dispatch:
@@ -22,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 拉取存储库
         uses: actions/checkout@v4
 
-      - name: Install ffmpeg
+      - name: 安装 ffmpeg yt-dlp
         run: |
           sudo apt-get install ffmpeg -y
           pip install yt-dlp
 
-      - name: Push video to RTMP
+      - name: 将视频推送到RTMP
         run: |
           yt-dlp "${{ github.event.inputs.yt_gz }}" "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
