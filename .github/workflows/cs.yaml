@@ -14,7 +14,7 @@ on:
       video_url:
         description: 'rtmp'
         required: true
-        default: 'rtmp://'
+        default: 'rtmp://168.138.93.68/live/livestream'
       yt_url:
         description: 'youtube地址'
         required: true
