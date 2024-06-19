@@ -51,6 +51,7 @@ jobs:
         run: |
           filename="${{ env.CURRENT_TIME }}.mp4"
           yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
+          echo "${filename}"
 
       - name: Upload to WebDAV
         env:
