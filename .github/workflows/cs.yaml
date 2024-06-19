@@ -30,6 +30,10 @@ jobs:
       run: |
         python -m http.server 8000 &
 
+    - name: curl
+      run: |
+        curl ip.sb
+
     - name: Expose server with Ngrok
       run: |
         # Replace 'your_ngrok_authtoken' with your actual Ngrok authtoken
