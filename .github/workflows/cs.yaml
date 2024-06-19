@@ -31,4 +31,4 @@ jobs:
 
       - name: Push video to RTMP
         run: |
-            ffmpeg -re -stream_loop -1 -i 1500.mp4 -c copy -f flv "${{ github.event.inputs.video_url }}"
+            ffmpeg -re -stream_loop -1 -i 20240619150133.mp4 -c copy -f flv "${{ github.event.inputs.video_url }}"
