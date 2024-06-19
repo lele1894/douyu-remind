@@ -7,39 +7,38 @@ on:
         description: '要下载的 YouTube 视频的 URL'
         required: true
         default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      webdav_endpoint:
+        description: 'WebDAV 服务器端点'
+        required: true
+      webdav_username:
+        description: 'WebDAV 用户名'
+        required: true
+      webdav_password:
+        description: 'WebDAV 密码'
+        required: true
 
 jobs:
   download_video:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3  # 使用支持 Node.js 20 的版本
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: 设置Python
-      uses: actions/setup-python@v4  # 使用支持 Node.js 20 的版本
-      with:
-        python-version: '3.x'
+      - name: 设置 Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: 安装 yt-dlp
-      run: |
-        python -m pip install --upgrade pip
-        pip install yt-dlp
+      - name: 安装 yt-dlp
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
 
-    - name: 下载视频
-      run: |
-        timestamp=$(date +'%Y%m%d%H%M%S')
-        yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+      - name: 下载视频
+        run: |
+          yt-dlp -o downloaded_file "${{ github.event.inputs.video_url }}"
 
-    - name: 配置Git
-      run: |
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
-
-    - name: 添加视频并将其提交到存储库
-      run: |
-        git add .
-        git commit -m "Add downloaded video"
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 将文件上传到 WebDAV
+        run: |
+          curl -T downloaded_file -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename downloaded_file)"
