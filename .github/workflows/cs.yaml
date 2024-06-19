@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          node-version: '20'  # or a higher supported version
 
       - name: Download file with curl
         run: |
