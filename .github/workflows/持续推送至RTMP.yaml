@@ -14,7 +14,7 @@ on:
       yt_gz:
         description: 'yt分辨率选择'
         required: true
-        default: "-f 95"
+        default: "-f 96"
 
 
 jobs:
@@ -32,4 +32,4 @@ jobs:
 
       - name: 将视频推送到RTMP
         run: |
-          yt-dlp "${{ github.event.inputs.yt_gz }}" "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -rtbufsize 512M -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
+          yt-dlp "${{ github.event.inputs.yt_gz }}" "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -rtbufsize 2048M -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
