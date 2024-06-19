@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.x]  # Specify the Python version here
+        python-version: [3.x]
 
     steps:
       - name: Checkout repository
@@ -51,12 +51,13 @@ jobs:
         run: |
           filename="${{ env.CURRENT_TIME }}.mp4"
           yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
-          echo "${filename}"
+          echo "::set-output name=filename::${filename}"  # Use set-output to pass filename to the next step
 
       - name: Upload to WebDAV
         env:
           WEBDAV_ENDPOINT: ${{ github.event.inputs.webdav_endpoint }}
           WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
           WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
+          DOWNLOAD_URL: ${{ steps.download.outputs.filename }}
         run: |
-          curl -T "${filename}" -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" "${WEBDAV_ENDPOINT}
+          curl -T "${DOWNLOAD_URL}" -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" "${WEBDAV_ENDPOINT}/$(basename "${DOWNLOAD_URL}")"
