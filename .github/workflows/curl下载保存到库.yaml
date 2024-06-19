@@ -1,4 +1,4 @@
-name: curl下载保存到库（小于100M）
+name: curl下载保存到库
 
 on:
   workflow_dispatch:
