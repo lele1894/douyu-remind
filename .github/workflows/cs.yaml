@@ -26,13 +26,13 @@ jobs:
         sudo mv ngrok /usr/local/bin/ngrok
         ngrok version  # 验证安装是否成功
 
-    - name: Start HTTP server
-      run: |
-        python -m http.server 8000 &
-
     - name: curl
       run: |
         curl ip.sb
+
+    - name: Start HTTP server
+      run: |
+        python -m http.server 8000 &
 
     - name: Expose server with Ngrok
       run: |
