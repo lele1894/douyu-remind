@@ -37,9 +37,9 @@ jobs:
       - name: Push video to RTMP
         run: |
           while true; do
-            yt-dlp -f "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
-              if [ ${{ github.event.inputs.stop }} == 'true' ]; then
-              echo "Stopping continuous push as requested."
-              exit 0
+            yt-dlp "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
+            if [ ${{ github.event.inputs.stop }} == 'true' ]; then
+            echo "Stopping continuous push as requested."
+            exit 0
             fi
           done
