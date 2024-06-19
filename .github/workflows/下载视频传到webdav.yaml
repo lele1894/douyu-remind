@@ -36,9 +36,11 @@ jobs:
           pip install yt-dlp
 
       - name: 下载视频
+        id: download
         run: |
-          yt-dlp -o downloaded_file "${{ github.event.inputs.video_url }}"
+          downloaded_file=$(yt-dlp -o '%(title)s.%(ext)s' -f best "${{ github.event.inputs.video_url }}")
+          echo "::set-output name=downloaded_file::$downloaded_file"
 
       - name: 将文件上传到 WebDAV
         run: |
-          curl -T downloaded_file -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename downloaded_file)"
+          curl -T "${{ steps.download.outputs.downloaded_file }}" -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/"
