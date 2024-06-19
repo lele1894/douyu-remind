@@ -1,41 +1,24 @@
-name: Ngrok Expose
+name: Test Speed
 
-on:
-  push:
-    branches:
-      - main  # 根据需要调整分支名
+on: [push]
 
 jobs:
-  expose:
+  test_speed_job:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+      
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'  # 如果需要，替换为你的 Python 版本
-
-    - name: Install Ngrok
+        python-version: '3.10'  # 指定你的 Python 版本
+        
+    - name: Install dependencies
       run: |
-        #wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-        tar -xvf ngrok-v3-stable-linux-amd64.tgz
-        sudo mv ngrok /usr/local/bin/ngrok
-        ngrok version  # 验证安装是否成功
-
-    - name: curl
-      run: |
-        curl ip.sb
-
-    - name: Start HTTP server
-      run: |
-        python -m http.server 8000 &
-
-    - name: Expose server with Ngrok
-      run: |
-        # Replace 'your_ngrok_authtoken' with your actual Ngrok authtoken
-        ngrok authtoken 2ZLypF1D5iqnUUlMoKpuvAcK1aS_YvSw8QEw5A2QzpjHNPN6
-        ngrok http 8000
+        python -m pip install --upgrade pip
+        #pip install speedtest-cli  # 如果需要安装依赖的话
+      
+    - name: Run speed test
+      run: python scripts/cs.py  # 执行你的 Python 脚本
