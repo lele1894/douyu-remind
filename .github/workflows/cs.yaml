@@ -1,56 +1,20 @@
-name: 下载并上传 YouTube 视频到 WebDAV
+name: Download File Example
 
-on:
-  workflow_dispatch:
-    inputs:
-      video_url:
-        description: '要下载的 YouTube 视频的 URL'
-        required: true
-        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-      webdav_endpoint:
-        description: 'WebDAV 服务器端点'
-        required: true
-        default: 'https://higa.teracloud.jp/dav/'
-      webdav_username:
-        description: 'WebDAV 用户名'
-        required: true
-      webdav_password:
-        description: 'WebDAV 密码'
-        required: true
+on: [push]
 
 jobs:
-  download_and_upload:
+  download-file:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 签出存储库
-        uses: actions/checkout@v4
-      - name: 设置Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10' # 指定您需要的 Python 版本
-      - name: Install yt-dlp
-        run: |
-          python -m pip install --upgrade pip
-          pip install yt-dlp
-      - name: 获取当前时间
-        id: current_time
-        run: echo "CURRENT_TIME=$(date +'%Y%m%d_%H%M%S')" >> $GITHUB_ENV
-      - name: 下载视频并获取文件名
-        id: download
-        run: |
-          filename="${{ env.CURRENT_TIME }}.mp4"
-          yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
-          echo "FILENAME=${filename}" >> $GITHUB_ENV  # Store filename in environment variable
-          echo "FILE_URL=https://github.com/$(basename "${filename}")" >> $GITHUB_ENV  # 输出文件下载地址
-      - name: 上传到WebDAV
-        env:
-          WEBDAV_ENDPOINT: ${{ github.event.inputs.webdav_endpoint }}
-          WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
-          WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
-          DOWNLOAD_FILENAME: ${{ env.FILENAME }}
-        run: |
-          curl -T "${DOWNLOAD_FILENAME}" \
-               -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" \
-               "${WEBDAV_ENDPOINT}/$(basename "${DOWNLOAD_FILENAME}")"
-      - name: 输出文件下载地址
-        run: echo "文件下载地址：${{ env.FILE_URL }}"
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download a file using wget
+      run: wget -O downloaded_file https://example.com/somefile
+
+    - name: Print the full path of the downloaded file
+      run: echo "Downloaded file path: $(pwd)/downloaded_file"
+
+    - name: List files in current directory
+      run: ls -al
