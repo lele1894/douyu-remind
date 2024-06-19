@@ -41,7 +41,8 @@ jobs:
         id: download
         run: |
           timestamp=$(date +'%Y%m%d%H%M%S')
-          downloaded_file=$(yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}")
+          yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+          downloaded_file=${timestamp}.%(ext)s
           echo "::set-output name=downloaded_file::$downloaded_file"
 
       - name: 将文件上传到 WebDAV
