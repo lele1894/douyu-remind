@@ -1,36 +1,36 @@
-name: 上传到WebDAV
+name: 手动上传到 WebDAV
 
 on:
-  push:
-    branches:
-      - main  # 这里改成你的默认分支
   workflow_dispatch:
     inputs:
       download_url:
         description: '要下载的文件的 URL'
-        required: false
-        default: 'https://example.com/path/to/your/file.txt'
+        required: true
+      webdav_endpoint:
+        description: 'WebDAV 服务器端点'
+        required: true
+      webdav_username:
+        description: 'WebDAV 用户名'
+        required: true
+      webdav_password:
+        description: 'WebDAV 密码'
+        required: true
 
 jobs:
   upload:
-    runs-on: ubuntu-latest  # 使用 Ubuntu 环境，你也可以选择其他支持的操作系统
+    runs-on: ubuntu-latest
 
     steps:
-      - name: 拉取代码
+      - name: 拉取最新的代码
         uses: actions/checkout@v2  # 拉取最新的代码
 
       - name: 设置下载地址
-        run: echo "DOWNLOAD_URL=${{ github.event.inputs.download_url || 'https://example.com/path/to/your/file.txt' }}" >> $GITHUB_ENV
+        run: echo "::set-env name=DOWNLOAD_URL::${{ github.event.inputs.download_url }}"
 
-      - name: 下载文件
+      - name: 使用curl下载文件
         run: |
-          curl -O $DOWNLOAD_URL  # 使用环境变量中的下载 URL
+          curl -L -o downloaded_file $(echo $DOWNLOAD_URL)
 
-      - name: 上传到WebDAV
-        uses: srt32/webdav-upload-action@v1
-        with:
-          endpoint: 'https://higa.teracloud.jp/dav/'  # WebDAV 服务器地址
-          username: 'lele1894'  # 替换为你的账号
-          password: 'yD9R7YJdXNMHZ5fm'  # 替换为你的密码
-          localPath: $(basename $DOWNLOAD_URL)  # 获取文件名并作为本地文件路径
-          remotePath: /  # 远程 WebDAV 目录路径，这里可以根据需要修改
+      - name: 文件上传到WebDAV
+        run: |
+          curl -T downloaded_file -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/$(basename $DOWNLOAD_URL)"
