@@ -50,14 +50,15 @@ jobs:
         run: |
           filename="${{ env.CURRENT_TIME }}.mp4"
           yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
-          echo "::set-output name=filename::${filename}"  # Use set-output to pass filename to the next step
+          echo "FILENAME=${filename}" >> $GITHUB_ENV  # Store filename in environment variable
 
       - name: Upload to WebDAV
         env:
           WEBDAV_ENDPOINT: ${{ github.event.inputs.webdav_endpoint }}
           WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
           WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
+          DOWNLOAD_FILENAME: ${{ env.FILENAME }}
         run: |
-          curl -T "${{ steps.download.outputs.filename }}" \
+          curl -T "${DOWNLOAD_FILENAME}" \
                -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" \
-               "${WEBDAV_ENDPOINT}/$(basename "${{ steps.download.outputs.filename }}")"
+               "${WEBDAV_ENDPOINT}/$(basename "${DOWNLOAD_FILENAME}")"
