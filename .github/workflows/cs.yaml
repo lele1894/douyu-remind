@@ -20,13 +20,11 @@ jobs:
 
     - name: Install Ngrok
       run: |
-        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-        unzip ngrok-stable-linux-amd64.zip
+        #wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+        wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        tar -xvf ngrok-v3-stable-linux-amd64.tgz
         sudo mv ngrok /usr/local/bin/ngrok
         ngrok version  # 验证安装是否成功
-
-    - name: Update Ngrok
-      run: ngrok update
 
     - name: Start HTTP server
       run: |
