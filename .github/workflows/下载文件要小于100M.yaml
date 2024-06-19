@@ -20,3 +20,31 @@ on:
 jobs:
   download_video:
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          node-version: '20'  # or a higher supported version
+
+      - name: 设置 Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: 安装 yt-dlp
+        run: |
+          python -m pip install --upgrade pip
+          pip install yt-dlp
+
+      - name: 下载视频
+        id: download
+        run: |
+          timestamp=$(date +'%Y%m%d%H%M%S')
+          yt-dlp -o "${timestamp}.%(ext)s" "${{ github.event.inputs.video_url }}"
+          downloaded_file=${timestamp}.%(ext)s
+          echo "::set-output name=downloaded_file::$downloaded_file"
+
+      - name: 将文件上传到 WebDAV
+        run: |
+          curl -T "${{ steps.download.outputs.downloaded_file }}" -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}/"
