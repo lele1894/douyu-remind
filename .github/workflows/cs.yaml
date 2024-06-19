@@ -25,6 +25,9 @@ jobs:
         sudo mv ngrok /usr/local/bin/ngrok
         ngrok version  # 验证安装是否成功
 
+    - name: Update Ngrok
+      run: ngrok update
+
     - name: Start HTTP server
       run: |
         python -m http.server 8000 &
