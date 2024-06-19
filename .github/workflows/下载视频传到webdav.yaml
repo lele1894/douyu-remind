@@ -59,6 +59,4 @@ jobs:
           WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
           WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
         run: |
-          curl -T "${filename}" \
-               -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" \
-               "${WEBDAV_ENDPOINT}
+          curl -T "${filename}" -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" "${WEBDAV_ENDPOINT}
