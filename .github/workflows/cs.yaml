@@ -10,7 +10,7 @@ on:
       yt_url:
         description: 'youtube地址'
         required: true
-        default: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        default: 'https://www.youtube.com/watch?v=B_Sc1v1qR-g'
       yt_gz:
         description: 'yt分辨率选择'
         required: true
@@ -32,4 +32,4 @@ jobs:
 
       - name: Push video to RTMP
         run: |
-          yt-dlp "${{ github.event.inputs.yt_gz }}" "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -stream_loop -1 -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
+          yt-dlp "${{ github.event.inputs.yt_gz }}" "${{ github.event.inputs.yt_url }}" -o - | ffmpeg -re -i pipe:0 -c copy -f flv "${{ github.event.inputs.video_url }}"
