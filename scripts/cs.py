@@ -1,6 +1,5 @@
 import http.server
 import socketserver
-import os
 import subprocess
 import time
 
@@ -11,12 +10,13 @@ HTML_FILE = 'index.html'
 def start_server():
     Handler = http.server.SimpleHTTPRequestHandler
     with socketserver.TCPServer(("localhost", 0), Handler) as httpd:
-        print("Local HTTP server started at port", httpd.server_port)
-        print("Server URL: http://localhost:" + str(httpd.server_port))
+        server_port = httpd.server_address[1]  # Get the server's port
+        print("Local HTTP server started at port", server_port)
+        print("Server URL: http://localhost:" + str(server_port))
 
         # Run ngrok to expose the local server to the internet
         try:
-            ngrok_process = subprocess.Popen(['ngrok', 'http', str(httpd.server_port)])
+            ngrok_process = subprocess.Popen(['ngrok', 'http', str(server_port)])
             time.sleep(2)  # Wait a bit for ngrok to start
             ngrok_process.wait()
         except FileNotFoundError:
