@@ -1,4 +1,4 @@
-name: 下载YouTube视频到WEBDAV
+name: 下载并上传 YouTube 视频到 WebDAV
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ on:
         required: true
 
 jobs:
-  download_and_upload_video:
+  download_and_upload:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,18 +39,15 @@ jobs:
       - name: 下载视频并获取文件名
         id: download
         run: |
-          filename=$(yt-dlp --get-filename -o '%(title)s.%(ext)s' "${{ github.event.inputs.video_url }}")
-          echo "::set-output name=filename::$filename"
+          filename=$(yt-dlp --get-filename "${{ github.event.inputs.video_url }}")
+          echo "::set-output name=filename::${filename}"
 
-      - name: 上传视频到 WebDAV
-        uses: actions/upload-artifact@v2
-        with:
-          name: downloaded-video
-          path: ${{ steps.download.outputs.filename }}
-
-      - name: 安装 curl
-        run: sudo apt-get install -y curl
-
-      - name: 上传文件到 WebDAV
+      - name: 上传到 WebDAV
+        env:
+          WEBDAV_ENDPOINT: ${{ github.event.inputs.webdav_endpoint }}
+          WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
+          WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
         run: |
-          curl -T ${{ steps.download.outputs.filename }} -u ${{ github.event.inputs.webdav_username }}:${{ github.event.inputs.webdav_password }} "${{ github.event.inputs.webdav_endpoint }}$(basename ${{ steps.download.outputs.filename }})"
+          curl -T "${{ steps.download.outputs.filename }}" \
+               -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" \
+               "${WEBDAV_ENDPOINT}/$(basename "${{ steps.download.outputs.filename }}")"
