@@ -35,7 +35,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-          node-version: '20'
 
       - name: Install yt-dlp
         run: |
@@ -58,6 +57,7 @@ jobs:
           WEBDAV_ENDPOINT: ${{ github.event.inputs.webdav_endpoint }}
           WEBDAV_USERNAME: ${{ github.event.inputs.webdav_username }}
           WEBDAV_PASSWORD: ${{ github.event.inputs.webdav_password }}
-          DOWNLOAD_URL: ${{ steps.download.outputs.filename }}
         run: |
-          curl -T "${DOWNLOAD_URL}" -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" "${WEBDAV_ENDPOINT}/$(basename "${DOWNLOAD_URL}")"
+          curl -T "${{ steps.download.outputs.filename }}" \
+               -u "${WEBDAV_USERNAME}:${WEBDAV_PASSWORD}" \
+               "${WEBDAV_ENDPOINT}/$(basename "${{ steps.download.outputs.filename }}")"
