@@ -36,10 +36,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install yt-dlp
 
+      - name: 获取当前时间
+        id: current_time
+        run: echo "::set-output name=current_time::$(date +"%Y%m%d_%H%M%S")"
+
       - name: 下载视频并获取文件名
         id: download
         run: |
-          filename=$(yt-dlp --get-filename "${{ github.event.inputs.video_url }}")
+          filename="${{ steps.current_time.outputs.current_time }}.mp4"
+          yt-dlp -o "${filename}" "${{ github.event.inputs.video_url }}"
           echo "::set-output name=filename::${filename}"
 
       - name: 上传到 WebDAV
