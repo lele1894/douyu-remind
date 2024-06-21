@@ -2,7 +2,7 @@ import os
 import subprocess
 import shutil
 
-CRD_SSH_Code = input("谷歌 CRD SSH 代码 :")
+CRD_SSH_Code = input("谷歌CRD SSH代码 :")
 username = "user" #@param {type:"string"}
 password = "root" #@param {type:"string"}
 os.system(f"useradd -m {username}")
