@@ -1,14 +1,15 @@
-name: 工作流程名称  # Workflow name
+name: d1
 
 on:
-  workflow_dispatch:  # Allows the workflow to be manually triggered
+  workflow_dispatch:
   schedule:
-    - cron: "15 * * * *"  # Schedule to run at 4:15 AM and 5:15 AM every day
+    - cron: "1 * * * *"
 
 jobs:
-  check-bats-version:  # Job name
-    runs-on: ubuntu-latest  # Job runs on the latest version of Ubuntu
+  check-bats-version:
+    runs-on: ubuntu-latest
     steps:
-      - name: GitHub测试  # Step name
+      - name: GitHub测试
         run: |
-          curl -d "text=GitHub测试！" http://miaotixing.com/trigger?id=tzLyHCO  # Send test message using curl
+          current_time=$(date "+%Y-%m-%d %H:%M:%S")
+          curl -d "text=GitHub测试！当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
