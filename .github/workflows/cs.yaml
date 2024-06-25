@@ -1,5 +1,4 @@
-name: Redis container example
-
+name: PostgreSQL service example
 on: push
 
 jobs:
@@ -8,38 +7,44 @@ jobs:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
-    container: node:16-bullseye
+    container: node:10.18-jessie
 
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
-      redis:
+      postgres:
         # Docker Hub image
-        image: redis
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
         options: >-
-          --health-cmd "redis-cli ping"
+          --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 6379:6379
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v4
 
-      - name: Wait for Redis to be ready
-        run: |
-          for i in {1..30}; do
-            if docker exec $(docker ps -qf "ancestor=redis") redis-cli ping | grep -q PONG; then
-              echo "Redis is ready!"
-              exit 0
-            fi
-            echo "Waiting for Redis to be ready..."
-            sleep 2
-          done
-          echo "Redis did not become ready in time." >&2
-          exit 1
+      # Performs a clean installation of all dependencies in the `package.json` file
+      # For more information, see https://docs.npmjs.com/cli/ci.html
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Output Redis address
-        run: echo "Redis is running at redis://localhost:6379"
+      - name: Connect to PostgreSQL
+        # Runs a script that creates a PostgreSQL table, populates
+        # the table with data, and then retrieves the data.
+        run: node client.js
+        # Environment variables used by the `client.js` script to create a new PostgreSQL table.
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
