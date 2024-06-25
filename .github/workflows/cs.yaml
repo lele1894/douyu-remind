@@ -1,16 +1,14 @@
 name: d1
 
-on: workflow_dispatch
+on: workflow_dispatch  
+  schedule:
+    - cron: "20 * * * *"
 
 jobs:
-  if-Windows-else:
-    runs-on: macos-latest
+  check-bats-version:
+    runs-on: ubuntu-latest
     steps:
-      - name: condition 1
-        if: runner.os == 'Windows'
-        run: echo "The operating system on the runner is $env:RUNNER_OS."
-      - name: condition 2
-        if: runner.os != 'Windows'
-        run: echo "The operating system on the runner is not Windows, it's $RUNNER_OS."
-
+      - name: GitHub测试
+        run: |
+          curl -d "text=GitHub测试！" http://miaotixing.com/trigger?id=tzLyHCO
 
