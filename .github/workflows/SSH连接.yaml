@@ -1,4 +1,4 @@
-name: CI
+name: SSH连接
 on: workflow_dispatch
 jobs:
   build:
