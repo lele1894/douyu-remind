@@ -1,21 +1,45 @@
-name: GitHub测试
+name: Redis container example
 
-on:
-  workflow_dispatch:
-    inputs:
-      user_message:
-        description: '输入您的留言'
-        required: true
-        default: 'GitHub测试！'
-  schedule:
-    - cron: "*/2 * * * *"  # Schedule to run every 3 minutes
+on: push
 
 jobs:
-  check-bats-version:
+  # Label of the container job
+  container-job:
+    # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
+    # Docker Hub image that `container-job` executes in
+    container: node:16-bullseye
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
     steps:
-      - name: GitHub测试
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Wait for Redis to be ready
         run: |
-          current_time=$(date "+%Y-%m-%d %H:%M:%S")
-          user_message="${{ github.event.inputs.user_message }}"
-          curl -d "text=$user_message 当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
+          for i in {1..30}; do
+            if docker exec $(docker ps -qf "ancestor=redis") redis-cli ping | grep -q PONG; then
+              echo "Redis is ready!"
+              exit 0
+            fi
+            echo "Waiting for Redis to be ready..."
+            sleep 2
+          done
+          echo "Redis did not become ready in time." >&2
+          exit 1
+
+      - name: Output Redis address
+        run: echo "Redis is running at redis://localhost:6379"
