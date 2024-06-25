@@ -1,9 +1,14 @@
-name: d1
+name: GitHub测试
 
 on:
   workflow_dispatch:
+    inputs:
+      user_message:
+        description: '输入您的留言'
+        required: true
+        default: 'GitHub测试！'
   schedule:
-    - cron: "1 * * * *"
+    - cron: "15 * * * *"
 
 jobs:
   check-bats-version:
@@ -12,4 +17,5 @@ jobs:
       - name: GitHub测试
         run: |
           current_time=$(date "+%Y-%m-%d %H:%M:%S")
-          curl -d "text=GitHub测试！当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
+          user_message="${{ github.event.inputs.user_message }}"
+          curl -d "text=$user_message 当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
