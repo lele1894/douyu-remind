@@ -1,18 +1,21 @@
-name: GitHub 操作演示
-run-name: ${{ github.actor }} 正在测试 GitHub Actions 🚀
-on: [push]
+name: GitHub测试
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_message:
+        description: '输入您的留言'
+        required: true
+        default: 'GitHub测试！'
+  schedule:
+    - cron: "15 * * * *"
+
 jobs:
-  Explore-GitHub-Actions:
+  check-bats-version:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 该作业由以下内容自动触发 ${{ github.event_name }} 事件."
-      - run: echo "🐧 该作业现在运行在 ${{ runner.os }} 由 GitHub 托管的服务器!"
-      - run: echo "🔎 您的分支机构的名称是 ${{ github.ref }}你的存储库是 ${{ github.repository }}."
-      - name: 查看存储库代码
-        uses: actions/checkout@v4
-      - run: echo "💡 那个 ${{ github.repository }} 存储库已克隆到运行器."
-      - run: echo "🖥️工作流程现在已准备好在运行器上测试您的代码."
-      - name: 列出存储库中的文件
+      - name: GitHub测试
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 这项工作的状态 ${{ job.status }}."
+          current_time=$(date "+%Y-%m-%d %H:%M:%S")
+          user_message="${{ github.event.inputs.user_message }}"
+          curl -d "text=$user_message 当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
