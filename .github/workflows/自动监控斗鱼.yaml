@@ -11,17 +11,20 @@ on:
     - cron: "10 * * * *"
 
 jobs:
-  check-bats-version:
+  check-douyu:
     runs-on: ubuntu-latest
     steps:
-      - name: 自动监控斗鱼
-        run: |
-          ROOM_STATUS=$(curl -s "https://open.douyucdn.cn/api/RoomApi/room/292098 | grep -o '"room_status":"[0-9]"' | cut -d'"' -f4)
-          echo "房间状态: $ROOM_STATUS" # 输出状态用于调试
-          if [ "$ROOM_STATUS" = "1" ]; then
-            echo "斗鱼正常"
-          else
-            echo "斗鱼关播"
-            curl -d "text=斗鱼关播/" http://miaotixing.com/trigger?id=tzLyHCO
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#${{ github.event.inputs.user_message }}"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: 自动监控斗鱼
+        run: python run.py ${{ github.event.inputs.user_message }}
+        shell: bash
