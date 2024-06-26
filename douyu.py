@@ -9,9 +9,9 @@ def check_douyu(room_id):
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     if data['data']['room_status'] == '1':
-        status = "斗鱼正常"
+        status = "斗鱼直播间运行正常"
     else:
-        status = "斗鱼关播"
+        status = "斗鱼直播间停播，请检查"
         requests.post("http://miaotixing.com/trigger?id=tzLyHCO", data={"text": f"{status} at {current_time}"})
     
     with open("douyu.txt", "a") as file:
