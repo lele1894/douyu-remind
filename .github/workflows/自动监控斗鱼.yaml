@@ -1,0 +1,23 @@
+name: 自动监控斗鱼
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_message:
+        description: '房间号'
+        required: true
+        default: '292098'
+  schedule:
+    - cron: "1 * * * *"
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 自动监控斗鱼
+        run: |
+          if curl -s "https://open.douyucdn.cn/api/RoomApi/room/${{ github.event.inputs.user_message }}" | grep -q '"room_status":"1"'; then
+            echo "斗鱼正常"
+          else
+            echo "斗鱼关播"
+            curl -d "text=斗鱼关播/" http://miaotixing.com/trigger?id=tzLyHCO
