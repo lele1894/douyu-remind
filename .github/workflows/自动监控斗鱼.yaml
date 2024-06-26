@@ -28,3 +28,11 @@ jobs:
       - name: 自动监控斗鱼
         run: python douyu.py ${{ github.event.inputs.user_message }}
         shell: bash
+
+      - name: Commit douyu.txt
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add douyu.txt
+          git commit -m "Update douyu.txt with the latest status"
+          git push
