@@ -17,5 +17,5 @@ jobs:
       - name: GitHub测试
         run: |
           current_time=$(date "+%Y-%m-%d %H:%M:%S")
-          user_message="${{ github.event.inputs.user_message }}"
-          curl -d "text=GitHub测！$user_message 当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
+          #user_message="${{ github.event.inputs.user_message }}"
+          curl -d "text=$user_message 当前时间：$current_time" http://miaotixing.com/trigger?id=tzLyHCO
