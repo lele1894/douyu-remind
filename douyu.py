@@ -6,13 +6,18 @@ def check_douyu(room_id):
     response = requests.get(url)
     data = response.json()
     
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     if data['data']['room_status'] == '1':
-        print("斗鱼正常")
+        status = "斗鱼正常"
     else:
-        print("斗鱼关播")
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        message = f"斗鱼关播 at {current_time}"
-        requests.post("http://miaotixing.com/trigger?id=tzLyHCO", data={"text": message})
+        status = "斗鱼关播"
+        requests.post("http://miaotixing.com/trigger?id=tzLyHCO", data={"text": f"{status} at {current_time}"})
+    
+    with open("douyu.txt", "a") as file:
+        file.write(f"{status} at {current_time}\n")
+
+    print(f"{status} at {current_time}")
 
 if __name__ == "__main__":
     import sys
