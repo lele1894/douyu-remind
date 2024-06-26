@@ -7,8 +7,8 @@ on:
         description: '输入您的留言'
         required: true
         default: 'GitHub测试！'
-  schedule:
-    - cron: "* * * * *"
+  #schedule:
+    #- cron: "10 * * * *"
 
 jobs:
   check-bats-version:
