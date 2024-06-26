@@ -8,7 +8,7 @@ on:
         required: true
         default: 'GitHub测试！'
   schedule:
-    - cron: "15 * * * *"
+    - cron: "* * * * *"
 
 jobs:
   check-bats-version:
