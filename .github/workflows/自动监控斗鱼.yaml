@@ -30,14 +30,9 @@ jobs:
         shell: bash
 
       - name: Commit douyu.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.LELE_TOKEN }}
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git clone https://github.com/lele1894/python.git
-          cd python
-          cp ../douyu.txt .
           git add douyu.txt
           git commit -m "Update douyu.txt with the latest status"
-          git push https://github-actions:${GITHUB_TOKEN}@github.com/lele1894/python.git
+          git push
