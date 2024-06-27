@@ -33,6 +33,9 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
+          git clone https://github.com/lele1894/python.git
+          cd python
+          cp ../douyu.txt .
           git add douyu.txt
           git commit -m "Update douyu.txt with the latest status"
           git push
