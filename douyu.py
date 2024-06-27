@@ -15,9 +15,9 @@ def check_douyu(room_id):
         requests.post("http://miaotixing.com/trigger?id=tzLyHCO", data={"text": f"{status} at {current_time}"})
     
     with open("douyu.txt", "a") as file:
-        file.write(f"{status} at {current_time}\n")
+        file.write(f"{status} 英国格林威治时间（+0时区） {current_time}\n")
 
-    print(f"{status} at {current_time}")
+    print(f"{status} 英国格林威治时间（+0时区） {current_time}")
 
 if __name__ == "__main__":
     import sys
