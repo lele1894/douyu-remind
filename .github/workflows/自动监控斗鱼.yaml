@@ -23,7 +23,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests pytz
 
       - name: 自动监控斗鱼
         run: python douyu.py ${{ github.event.inputs.user_message }}
