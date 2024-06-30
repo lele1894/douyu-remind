@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmarks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        li:hover {
+            background-color: #f9f9f9;
+        }
+        .bookmark-title {
+            font-weight: bold;
+        }
+        .bookmark-link {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .delete-link {
+            margin-left: 10px;
+            color: #dc3545;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bookmarks</h1>
+    <ul>
+        {% for bookmark in bookmarks %}
+        <li>
+            <span class="bookmark-title">{{ bookmark['title'] }}</span> - 
+            <a class="bookmark-link" href="{{ bookmark['url'] }}" target="_blank">{{ bookmark['url'] }}</a>
+            <a class="delete-link" href="/delete/{{ loop.index0 }}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
