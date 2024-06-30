@@ -8,12 +8,10 @@ jobs:
 
     steps:
     - name: 签出存储库
-      uses: actions/checkout@v3
+      uses: actions/checkout@main
 
     - name: 安装 Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+      uses: actions/setup-node@main
 
     - name: 安装 Microsoft Visual Studio C++ 构建工具
       run: |
