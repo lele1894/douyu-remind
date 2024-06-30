@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 签出存储库
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
       - name: 设置Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@main
         with:
           python-version: '3.10' # 指定您需要的 Python 版本
       - name: Install yt-dlp
