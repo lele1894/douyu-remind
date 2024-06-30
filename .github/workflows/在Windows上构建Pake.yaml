@@ -36,4 +36,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pake-output
-        path: ./cs.zip
+        path: ./测试.zip
