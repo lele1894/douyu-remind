@@ -1,4 +1,4 @@
-name: Build Pake on Windows
+name: 在Windows上构建Pake
 
 on: workflow_dispatch
 
@@ -15,25 +15,25 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Install Microsoft Visual Studio C++ Build Tools
+    - name: 安装 Microsoft Visual Studio C++ 构建工具
       run: |
         choco install visualstudio2019buildtools --version=16.11.0.0 --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended --includeOptional" -y
         setx PATH "%PATH%;C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin"
         setx PATH "%PATH%;C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC\14.29.30133\bin\Hostx64\x64"
 
-    - name: Install rustup
+    - name: 安装rustup
       run: |
         curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
         setx PATH "%PATH%;C:\Users\runneradmin\.cargo\bin"
 
-    - name: Install pake-cli
+    - name: 安装 pake-cli
       run: npm install -g pake-cli
 
-    - name: Run pake
-      run: pake ./index.html --name html-test --use-local-file
+    - name: 运行pake
+      run: pake ./cs/index.html --name html-test --use-local-file
 
-    - name: Upload Artifact
+    - name: 上传工件
       uses: actions/upload-artifact@v2
       with:
         name: pake-output
-        path: ./cs
+        path: ./win
