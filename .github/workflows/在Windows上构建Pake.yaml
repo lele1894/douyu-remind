@@ -30,10 +30,10 @@ jobs:
       run: npm install -g pake-cli
 
     - name: 运行pake
-      run: pake ./cs/index.html --name 测试 --use-local-file --icon ./cs/ico.ico --height 900px --width 1600px
+      run: pake ./cs/index.html --name cs --use-local-file --icon ./cs/ico.ico --height 900px --width 1600px
 
     - name: 上传工件
       uses: actions/upload-artifact@v4
       with:
         name: pake-output
-        path: ./
+        path: ./cs.zip
