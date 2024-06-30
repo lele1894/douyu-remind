@@ -33,7 +33,7 @@ jobs:
       run: pake ./cs/index.html --name html-test --use-local-file
 
     - name: 上传工件
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: pake-output
         path: ./win
