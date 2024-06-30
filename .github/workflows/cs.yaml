@@ -35,3 +35,9 @@ jobs:
 
     - name: Run pake
       run: pake ./index.html --name html-test --use-local-file
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: pake-output
+        path: ./path/to/generated/files
