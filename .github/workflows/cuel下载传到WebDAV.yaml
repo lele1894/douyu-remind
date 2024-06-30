@@ -26,8 +26,6 @@ jobs:
     steps:
       - name: 拉取码
         uses: actions/checkout@main
-        with:
-          node-version: '20'  # or a higher supported version
 
       - name: 使用curl下载文件
         run: |
