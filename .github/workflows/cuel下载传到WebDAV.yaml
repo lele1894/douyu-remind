@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: 拉取码
-        uses: actions/checkout@v2
+        uses: actions/checkout@main
         with:
           node-version: '20'  # or a higher supported version
 
