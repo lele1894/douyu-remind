@@ -7,10 +7,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
+    - name: 签出存储库
       uses: actions/checkout@v3
 
-    - name: Install Node.js
+    - name: 安装 Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
