@@ -13,4 +13,4 @@ os.environ["PATH"] += os.pathsep + os.path.expanduser("~/.cargo/bin")
 subprocess.run("npm install -g pake-cli", shell=True, check=True)
 
 # Run pake to package as a Windows application
-subprocess.run("pake ./index.html --name html-test --use-local-file --target win", shell=True, check=True)
+subprocess.run("pake ./index.html --name html-test --use-local-file", shell=True, check=True)
