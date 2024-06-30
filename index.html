@@ -1,58 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bookmarks</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>XXX</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
         }
-        h1 {
-            margin-bottom: 20px;
-            color: #333;
+        .link-container {
+            display: none;
+            text-align: center;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        li:hover {
-            background-color: #f9f9f9;
-        }
-        .bookmark-title {
-            font-weight: bold;
-        }
-        .bookmark-link {
+        .link-container a {
+            font-size: 5em;
+            color: blue;
             text-decoration: none;
-            color: #007bff;
         }
-        .delete-link {
-            margin-left: 10px;
-            color: #dc3545;
-            text-decoration: none;
+        .password-form {
+            text-align: center;
+        }
+        .password-form input[type="password"] {
+            font-size: 1em;
+            padding: 0.5em;
+        }
+        .password-form input[type="submit"] {
+            font-size: 1em;
+            padding: 0.5em;
+            margin-top: 1em;
         }
     </style>
+    <script type="text/javascript">
+        document.addEventListener('plusready', function(){
+            //plus api calls can be made here
+        });
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('password').value;
+            const correctPassword = 'sex'; // Set your password here
+            if (passwordInput === correctPassword) {
+                document.querySelector('.password-form').style.display = 'none';
+                document.querySelector('.link-container').style.display = 'block';
+            } else {
+                alert('密码错误。请再试一次.');
+            }
+            return false;
+        }
+    </script>
 </head>
 <body>
-    <h1>Bookmarks</h1>
-    <ul>
-        {% for bookmark in bookmarks %}
-        <li>
-            <span class="bookmark-title">{{ bookmark['title'] }}</span> - 
-            <a class="bookmark-link" href="{{ bookmark['url'] }}" target="_blank">{{ bookmark['url'] }}</a>
-            <a class="delete-link" href="/delete/{{ loop.index0 }}">Delete</a>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="password-form">
+        <form onsubmit="return checkPassword();">
+            <label for="password">输入密码:</label><br>
+            <input type="password" id="password" required><br>
+            <input type="submit" value="提交">
+        </form>
+    </div>
+    <div class="link-container">
+        <a href="https://ogfap.com/">点击这里</a>
+    </div>
 </body>
 </html>
