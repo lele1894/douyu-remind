@@ -30,7 +30,7 @@ jobs:
       run: npm install -g pake-cli
 
     - name: 运行pake
-      run: pake ./cs/index.html --name 测试 --use-local-file --icon ./cs/ico.ico --height 900 --width 1600
+      run: pake ./cs/index.html --name cs --use-local-file --icon ./cs/ico.ico --height 900 --width 1600
 
     - name: 上传工件
       uses: actions/upload-artifact@v4
