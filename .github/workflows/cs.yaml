@@ -1,4 +1,4 @@
-name: Node.js CI 与 Pake
+name: Run Pake and Package for Windows
 
 on: [push, pull_request]
 
@@ -10,31 +10,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y libwebkit2gtk-4.0-dev \
-            build-essential \
-            curl \
-            wget \
-            file \
-            libssl-dev \
-            libgtk-3-dev \
-            libayatana-appindicator3-dev \
-            librsvg2-dev
-        curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
-        source $HOME/.cargo/env
-
     - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
         node-version: '16'
 
-    - name: Install Pake CLI
-      run: npm install -g pake-cli
+    - name: Setup Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-    - name: Run pake
-      run: pake ./index.html --name html-test --use-local-file
+    - name: Install pip dependencies (if any)
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Run Python script to setup and execute Pake
+      run: python run_pake.py
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
