@@ -1,4 +1,4 @@
-name: pake
+name: Node.js CI with Pake
 
 on: [push, pull_request]
 
@@ -10,15 +10,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y libwebkit2gtk-4.0-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+        curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
+        source $HOME/.cargo/env
+
     - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
         node-version: '14'
 
-    - name: Install dependencies
-      run: |
-        npm install -g pake-cli
+    - name: Install Pake CLI
+      run: npm install -g pake-cli
 
     - name: Run pake
-      run: |
-        pake index.html --name html-test --use-local-file
+      run: pake index.html --name html-test --use-local-file
