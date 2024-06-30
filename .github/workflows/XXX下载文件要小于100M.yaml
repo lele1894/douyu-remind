@@ -1,7 +1,9 @@
 name: XXX下载文件要小于100M
-
 on: workflow_dispatch
-
 jobs:
-  download_video:
+  build:
     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: 设置 tmate 会话
+      uses: mxschmitt/action-tmate@main
