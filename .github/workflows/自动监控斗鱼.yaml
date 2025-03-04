@@ -7,8 +7,8 @@ on:
         description: '房间号'
         required: true
         default: '292098'
-  schedule:
-    - cron: "0 0 * * *"
+  #schedule:
+  #  - cron: "0 0 * * *"
 
 jobs:
   check-douyu:
